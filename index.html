@@ -25,11 +25,13 @@
    demoVideoUrl  The product demo. Paste a YouTube, Vimeo, Loom or Google Drive
                  link, or the path of a video file next to this page
                  (e.g. "assets/demo.mp4"). Leave "" to show "Demo video coming soon".
+   demoPoster    Optional: the still shown before a video file plays.
    pilotFormUrl  Optional: a pilot sign-up form (Tally, Airtable, Google Forms).
    contactEmail  Optional: shown in the pilot section when there's no form.
    ============================================================================ */
 window.SITE = {
-  demoVideoUrl: "",
+  demoVideoUrl: "assets/video/demo.mp4",
+  demoPoster: "assets/video/demo-poster.jpg",
   pilotFormUrl: "",
   contactEmail: ""
 };
@@ -52,7 +54,6 @@ window.SITE = {
   --tint-2: #E1E8FF;
   --line: #D3DBF2;
   --grey: #A2A8B6;
-  --wave-off: #C6D1F2;
   --on-blue: #FFFFFF;
   --on-blue-2: #D3DDFF;
   --on-blue-line: rgba(255, 255, 255, 0.3);
@@ -289,27 +290,8 @@ p { margin: 0; }
   .split.flip .media { order: 0; }
 }
 
-/* ---------- listen: A/B player ---------- */
-.ab { background: var(--white); padding: clamp(18px, 3vw, 32px); display: grid; gap: 20px; }
-.ab-top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.play { flex: none; width: 60px; height: 60px; border-radius: 50%; border: 0; background: var(--blue); color: var(--white); display: grid; place-items: center; cursor: pointer; }
-.play:hover { background: var(--blue-deep); }
-.play svg { width: 22px; height: 22px; fill: currentColor; }
-.play .i-pause { display: none; }
-.ab.playing .play .i-play { display: none; }
-.ab.playing .play .i-pause { display: block; }
-.seg { display: inline-flex; border: 2px solid var(--blue); }
-.seg button { border: 0; padding: 10px 20px; background: var(--white); color: var(--blue); font: 500 var(--s-body)/1 var(--sans); cursor: pointer; }
-.seg button[aria-checked="true"] { background: var(--blue); color: var(--white); }
-.ab .time { margin-left: auto; font-family: var(--mono); font-size: var(--s-small); color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.wave { position: relative; height: 88px; background: var(--tint); }
-.wave canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.wave input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
-.wave:focus-within { outline: 2px solid var(--blue); outline-offset: 3px; }
-@media (max-width: 600px) { .ab .time { margin-left: 0; } }
-
 /* ---------- how it works ---------- */
-.steps { list-style: none; margin: 0; padding: clamp(20px, 3vw, 32px); background: var(--tint); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; }
+.steps { list-style: none; margin: 0; padding: clamp(20px, 3vw, 32px); background: var(--white); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; }
 .steps li { position: relative; display: grid; gap: 8px; align-content: start; padding-top: 22px; border-top: 2px solid var(--line); min-width: 0; }
 .steps li::before { content: ""; position: absolute; top: -7px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--blue); }
 .steps .at { font-family: var(--mono); font-size: var(--s-small); color: var(--blue); font-variant-numeric: tabular-nums; }
@@ -324,7 +306,7 @@ p { margin: 0; }
 
 /* ---------- two modes: one card per mode, a timeline over a numbered key ---------- */
 .modes { display: grid; gap: clamp(20px, 3vw, 28px); }
-.mode { background: var(--white); padding: clamp(20px, 3.5vw, 40px); display: grid; gap: clamp(24px, 3vw, 34px); min-width: 0; }
+.mode { background: var(--tint); padding: clamp(20px, 3.5vw, 40px); display: grid; gap: clamp(24px, 3vw, 34px); min-width: 0; }
 .mode-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 10px clamp(24px, 5vw, 64px); align-items: end; }
 .mode-head h3 { font-size: clamp(1.7rem, 3vw, 2.2rem); line-height: 1.1; }
 .mode-head > p { color: var(--ink-2); }
@@ -334,7 +316,7 @@ p { margin: 0; }
 .tl-name { position: absolute; top: 0; font-size: var(--s-small); font-weight: 500; line-height: 1.2; white-space: nowrap; }
 .tl-track { position: absolute; left: 0; right: 0; top: 26px; height: 46px; }
 .tl-seg { position: absolute; top: 0; bottom: 0; }
-.tl-seg.check { background: var(--tint-2); }
+.tl-seg.check { background: var(--line); }
 .tl-seg.song { background: var(--blue); }
 .tl-gap { position: absolute; top: 50%; border-top: 2px dotted var(--grey); }
 .tl-mark { position: absolute; top: 50%; transform: translate(-50%, -50%); }
@@ -438,7 +420,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
   <div class="wrap bar-in">
     <a class="brand" href="#top"><img src="assets/automix-logo.svg" alt="Automix" width="82" height="28"></a>
     <nav class="bar-links" aria-label="On this page">
-      <a href="#listen">Hear the difference</a>
+      <a href="#demo">Demo</a>
       <a href="#how">How it works</a>
       <a href="#modes">Two modes</a>
       <a href="#control">Control</a>
@@ -457,13 +439,13 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
         <h1>A great live mix in <span class="underline">10&nbsp;seconds</span></h1>
         <p class="hero-sub">Automatic mixing for live bands. You stay in charge of every setting.</p>
         <div class="hero-cta">
-          <a class="btn" href="#listen">Hear the difference</a>
-          <a class="btn btn-line" href="#demo">Watch the demo</a>
+          <a class="btn" href="#demo">Watch the demo</a>
+          <a class="btn btn-line" href="#how">How it works</a>
         </div>
       </div>
       <div class="hero-side">
         <p class="promo">Pilots start in spring 2027. <a class="more" href="#pilot">Join the pilot</a></p>
-        <figure class="desk" id="desk" aria-label="Twelve of the 36 channel faders from Automix's mix of the song below. They start at minus 6 dB and move to the mix at 10 seconds.">
+        <figure class="desk" id="desk" aria-label="Twelve of the 36 channel faders from Automix's mix of a full band recording. They start at minus 6 dB and move to the mix at 10 seconds.">
           <div class="desk-head">
             <span class="desk-title">FULL BAND · 36 CH</span>
             <span class="desk-clock" aria-hidden="true"><span class="dot"></span><span id="clock">0:10</span></span>
@@ -479,7 +461,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
             <span id="deskStatus">First mix at 0:10: every fader set.</span>
             <button class="link-btn" id="replay" type="button">Replay</button>
           </figcaption>
-          <p class="desk-note">Sped up. A few of the 36 faders from Automix's mix of the full song, the one you can hear below.</p>
+          <p class="desk-note">Sped up. A few of the 36 faders from Automix's mix of a full band recording.</p>
         </figure>
       </div>
     </div>
@@ -488,8 +470,8 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
   <!-- Intro: notice, statement, demo video (link in SITE.demoVideoUrl at the top of this file), jump links -->
   <div class="wrap intro" id="demo">
     <div class="notice">
-      <p>New: hear Automix mix all 36 tracks of a full band recording, before and after.</p>
-      <p><a class="more" href="#listen">Hear the difference</a></p>
+      <p>New: watch Automix mix a live band from scratch, sound on.</p>
+      <p><a class="more" href="#video">Watch the demo</a></p>
     </div>
     <p class="statement">Automix listens to every channel on stage and sets each one's volume, panning, EQ (tone) and compression (dynamics) within 10 seconds of the band starting to play. Then it keeps the mix balanced as they play.</p>
     <div>
@@ -497,63 +479,29 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
         <div class="video-empty" id="videoEmpty">
           <span class="play-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3.5v17l15-8.5z"/></svg></span>
           <p class="video-empty-title">Demo video coming soon</p>
-          <p class="video-empty-sub" id="videoEmptySub">Until then, hear the before and after below.</p>
+          <p class="video-empty-sub" id="videoEmptySub">Until then, see how it works below.</p>
         </div>
       </div>
       <p class="video-cap" id="videoCap">Automix setting up a band from scratch and keeping it balanced while they play.</p>
       <p class="video-cap" id="videoLink" hidden>Video not loading? <a id="videoHref" href="#" target="_blank" rel="noopener">Open it in a new tab ↗</a></p>
     </div>
     <p class="jump"><span>Jump to:</span>
-      <a href="#listen">Hear the difference</a>
       <a href="#how">How it works</a>
       <a href="#modes">Two modes</a>
       <a href="#control">Stay in charge</a>
     </p>
   </div>
 
-  <!-- Chapter: listen -->
-  <section class="chapter tint" id="listen">
-    <div class="wrap chapter-in">
-      <div class="chapter-head">
-        <h2>Hear the difference</h2>
-        <p>A full band, 36 tracks. Switch between the raw tracks and Automix's mix while it plays. Both are at the same loudness (−16 LUFS), so you're comparing the mix, not the volume.</p>
-      </div>
-      <div class="ab" id="ab">
-        <div class="ab-top">
-          <button class="play" id="play" type="button" aria-label="Play">
-            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
-            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4.5v16H6zM13.5 4H18v16h-4.5z"/></svg>
-          </button>
-          <div class="seg" role="radiogroup" aria-label="Version">
-            <button type="button" role="radio" aria-checked="false" data-v="unmixed" id="vUnmixed">Unmixed</button>
-            <button type="button" role="radio" aria-checked="true" data-v="automix" id="vAutomix">Automix</button>
-          </div>
-          <span class="time"><span id="tNow">0:00</span> / <span id="tDur">3:20</span></span>
-        </div>
-        <div class="wave" id="wave">
-          <canvas id="waveCanvas"></canvas>
-          <input type="range" id="seek" min="0" max="200.7" step="0.1" value="0" aria-label="Playback position">
-        </div>
-      </div>
-      <audio id="aUnmixed" preload="metadata" src="assets/audio/band-unmixed.mp4"></audio>
-      <audio id="aAutomix" preload="metadata" src="assets/audio/band-automix.mp4"></audio>
-      <div class="pairs">
-        <div><h3>Unmixed</h3><p>What gets to the mixing desk.</p></div>
-        <div><h3>Automix</h3><p>Levels, panning, EQ and compression for all 36 tracks set by Automix, with zero additional edits to the mix.</p></div>
-      </div>
-    </div>
-  </section>
-
   <!-- Chapter: how it works -->
-  <section class="chapter" id="how">
+  <section class="chapter tint" id="how">
     <div class="wrap chapter-in">
       <div class="chapter-head">
         <h2>From the first note to a balanced mix</h2>
         <p>Automix sets every channel against all the others, the way finished records are balanced: the lead vocal first, then each instrument at its place below it.</p>
       </div>
       <figure class="shot">
-        <a href="assets/shots/app-mixer.jpg" target="_blank" rel="noopener"><img src="assets/shots/app-mixer.jpg" alt="The Automix app mixing the 36-track song from above: channel strips for the acoustic guitars, bass, drums and electric guitars, each with its EQ, compressor and fader set; the selected bass channel's EQ and compressor below; the Why panel listing each change; and the main section on the right." width="2220" height="1284" loading="lazy"></a>
-        <figcaption>The app 3:05 into the song above, in Plug and play mode. Every fader, EQ and compressor here was set by Automix. The bass is selected, and the Why panel lists each change as it happens.</figcaption>
+        <a href="assets/shots/app-mixer.jpg" target="_blank" rel="noopener"><img src="assets/shots/app-mixer.jpg" alt="The Automix app mixing a 36-track band recording: channel strips for the acoustic guitars, bass, drums and electric guitars, each with its EQ, compressor and fader set; the selected bass channel's EQ and compressor below; the Why panel listing each change; and the main section on the right." width="2220" height="1284" loading="lazy"></a>
+        <figcaption>The app 3:05 into a 36-track band recording, in Plug and play mode. Every fader, EQ and compressor here was set by Automix. The bass is selected, and the Why panel lists each change as it happens.</figcaption>
       </figure>
       <ol class="steps">
         <li><span class="at">0:00</span><h3>It listens</h3><p>It hears every channel and works out what's on it. Its guesses wait for you to confirm the names, once.</p></li>
@@ -566,7 +514,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
   </section>
 
   <!-- Chapter: two modes -->
-  <section class="chapter tint" id="modes">
+  <section class="chapter" id="modes">
     <div class="wrap chapter-in">
       <div class="chapter-head">
         <h2>Two modes</h2>
@@ -647,7 +595,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
   </section>
 
   <!-- Chapter: control -->
-  <section class="chapter" id="control">
+  <section class="chapter tint" id="control">
     <div class="wrap chapter-in">
       <div class="chapter-head">
         <h2>The engineer stays in charge</h2>
@@ -670,7 +618,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
         </div>
       </div>
       <div class="why" aria-label="Examples of Automix's reasons">
-        <div class="why-head"><span>Why · every change comes with a reason</span><span>From the mix above</span></div>
+        <div class="why-head"><span>Why · every change comes with a reason</span><span>From that 36-track mix</span></div>
         <div class="why-row"><span class="kind">Level</span><span class="ch">Guitar solo</span><span class="val">−1.4 dB</span><span class="because">It carries the song while the singer rests, so it sits close under the vocal, well above the other guitars.</span></div>
         <div class="why-row"><span class="kind">Level</span><span class="ch">Harmony vocals</span><span class="val">about −16 dB each</span><span class="because">Twelve harmony parts share one level, since about nine sing at once.</span></div>
         <div class="why-row"><span class="kind">EQ</span><span class="ch">Lead vocal</span><span class="val">−4 dB at 1.1 kHz</span><span class="because">A resonance: it stood 9.1 dB above the sound around it.</span></div>
@@ -696,7 +644,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
   </section>
 
   <!-- Chapter: what's next -->
-  <section class="chapter tint" id="next">
+  <section class="chapter" id="next">
     <div class="wrap chapter-in">
       <div class="chapter-head">
         <h2>Working today, and what's next</h2>
@@ -754,7 +702,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
     <div class="foot-cols">
       <div>
         <h4>Product</h4>
-        <ul><li><a href="#listen">Hear the difference</a></li><li><a href="#how">How it works</a></li><li><a href="#modes">Two modes</a></li><li><a href="#control">Control</a></li></ul>
+        <ul><li><a href="#demo">Demo</a></li><li><a href="#how">How it works</a></li><li><a href="#modes">Two modes</a></li><li><a href="#control">Control</a></li></ul>
       </div>
       <div>
         <h4>Pilot</h4>
@@ -777,7 +725,6 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
   </div>
 </footer>
 
-<script src="assets/band-waveform.js"></script>
 <script>
 (function () {
   "use strict";
@@ -832,6 +779,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
       vid.controls = true;
       vid.playsInline = true;
       vid.preload = "metadata";
+      if ((SITE.demoPoster || "").trim()) vid.poster = SITE.demoPoster.trim();
       box.appendChild(vid);
       $("videoEmpty").hidden = true;
     } else {
@@ -874,7 +822,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
     }
   })();
 
-  /* ---------- the desk: some of the before/after song's faders, from its params.json (see README.md) ---------- */
+  /* ---------- the desk: some of the faders of Automix's mix of a 36-track recording, from its params.json (see README.md) ---------- */
   var START_DB = -6;       // channels the brain hasn't mixed sit at -6 dB in the app
   var TOTAL_CHANNELS = 36;
   var CHANNELS = [
@@ -987,131 +935,6 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
   }
   $("replay").addEventListener("click", run);
   if (!reduceMotion) requestAnimationFrame(function () { later(run, 250); });
-
-  /* ---------- listen: A/B player ---------- */
-  var audio = { unmixed: $("aUnmixed"), automix: $("aAutomix") };
-  var ab = $("ab"), seek = $("seek"), tNow = $("tNow"), tDur = $("tDur");
-  var version = "automix", playing = false, duration = 200.7;
-  var canvas = $("waveCanvas"), wave = window.SONG_WAVE || { unmixed: [], automix: [] };
-
-  function fmtTime(s) {
-    s = Math.max(0, Math.floor(s));
-    return Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
-  }
-  function current() { return audio[version]; }
-  function token(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
-
-  function drawWave() {
-    var w = canvas.clientWidth, h = canvas.clientHeight;
-    if (!w || !h) return;
-    var dpr = window.devicePixelRatio || 1;
-    if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-    }
-    var ctx = canvas.getContext("2d");
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
-    var data = wave[version] || [];
-    if (!data.length) return;
-    var bars = Math.max(40, Math.floor(w / 4));
-    var played = (current().currentTime || 0) / duration;
-    var on = version === "automix" ? token("--blue") : token("--ink-2");
-    var off = token("--wave-off");
-    for (var i = 0; i < bars; i++) {
-      var a = Math.floor(i * data.length / bars), b = Math.max(a + 1, Math.floor((i + 1) * data.length / bars));
-      var v = 0;
-      for (var j = a; j < b; j++) v = Math.max(v, data[j]);
-      var bh = Math.max(2, v * (h - 16));
-      ctx.fillStyle = (i + 0.5) / bars <= played ? on : off;
-      ctx.fillRect(i * (w / bars), (h - bh) / 2, Math.max(1, w / bars - 2), bh);
-    }
-    ctx.fillStyle = token("--ink");
-    ctx.fillRect(Math.min(w - 2, played * w), 6, 2, h - 12);
-  }
-
-  function updateTime() {
-    var t = current().currentTime || 0;
-    tNow.textContent = fmtTime(t);
-    seek.value = t.toFixed(1);
-    drawWave();
-  }
-  function setPlaying(p) {
-    playing = p;
-    ab.classList.toggle("playing", p);
-    $("play").setAttribute("aria-label", p ? "Pause" : "Play");
-  }
-  function seekTo(el, t, then) {
-    if (el.readyState >= 1) { el.currentTime = t; if (then) then(); }
-    else el.addEventListener("loadedmetadata", function () { el.currentTime = t; if (then) then(); }, { once: true });
-  }
-
-  $("play").addEventListener("click", function () {
-    var el = current();
-    if (playing) { el.pause(); setPlaying(false); return; }
-    audio[version === "automix" ? "unmixed" : "automix"].preload = "auto";
-    var p = el.play();
-    setPlaying(true);
-    if (p && p.catch) p.catch(function () { setPlaying(false); });
-  });
-
-  function choose(v) {
-    if (v === version) return;
-    var from = current(), t = from.currentTime || 0, wasPlaying = playing;
-    from.pause();
-    version = v;
-    var to = current();
-    seekTo(to, t, function () {
-      if (wasPlaying) {
-        var p = to.play();
-        if (p && p.catch) p.catch(function () { setPlaying(false); });
-      }
-    });
-    $("vAutomix").setAttribute("aria-checked", String(v === "automix"));
-    $("vUnmixed").setAttribute("aria-checked", String(v === "unmixed"));
-    drawWave();
-  }
-  $("vUnmixed").addEventListener("click", function () { choose("unmixed"); });
-  $("vAutomix").addEventListener("click", function () { choose("automix"); });
-  document.querySelector(".seg").addEventListener("keydown", function (e) {
-    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-      e.preventDefault();
-      choose(version === "automix" ? "unmixed" : "automix");
-      $(version === "automix" ? "vAutomix" : "vUnmixed").focus();
-    }
-  });
-
-  seek.addEventListener("input", function () {
-    var t = parseFloat(seek.value) || 0;
-    seekTo(current(), t);
-    tNow.textContent = fmtTime(t);
-    drawWave();
-  });
-
-  Object.keys(audio).forEach(function (k) {
-    var el = audio[k];
-    el.addEventListener("timeupdate", function () { if (el === current()) updateTime(); });
-    el.addEventListener("loadedmetadata", function () {
-      if (isFinite(el.duration) && el.duration > 0) {
-        duration = el.duration;
-        seek.max = duration.toFixed(1);
-        tDur.textContent = fmtTime(duration);
-      }
-    });
-    el.addEventListener("ended", function () {
-      if (el !== current()) return;
-      setPlaying(false);
-      el.currentTime = 0;
-      updateTime();
-    });
-  });
-
-  var raf = null;
-  function tick() { drawWave(); raf = playing ? requestAnimationFrame(tick) : null; }
-  ab.addEventListener("click", function () { if (playing && !raf) raf = requestAnimationFrame(tick); });
-  window.addEventListener("resize", drawWave);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawWave);
-  drawWave();
 })();
 </script>
 </body>
