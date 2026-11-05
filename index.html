@@ -26,13 +26,19 @@
                  link, or the path of a video file next to this page
                  (e.g. "assets/demo.mp4"). Leave "" to show "Demo video coming soon".
    demoPoster    Optional: the still shown before a video file plays.
-   pilotFormUrl  Optional: a pilot sign-up form (Tally, Airtable, Google Forms).
-   contactEmail  Optional: shown in the pilot section when there's no form.
+   signupUrl     Where the pilot section's email field sends each sign-up: a
+                 Formspree form address (https://formspree.io/f/...) or a Google
+                 Form's formResponse address. Leave "" and the field answers
+                 "Sign-up opens soon" instead of sending anything.
+   signupField   The name that service expects for the email: "email" for
+                 Formspree, "entry.<number>" for a Google Form.
+   contactEmail  Optional: shown under the field as "Questions? Email ...".
    ============================================================================ */
 window.SITE = {
   demoVideoUrl: "assets/video/demo.mp4",
   demoPoster: "assets/video/demo-poster.jpg",
-  pilotFormUrl: "",
+  signupUrl: "https://docs.google.com/forms/d/e/1FAIpQLSclduqS8MOQH2pikHiWAcBB4dQL7mQCLBLthDXiJGsIXYuKLA/formResponse",
+  signupField: "entry.481468926",
   contactEmail: ""
 };
 </script>
@@ -245,10 +251,9 @@ p { margin: 0; }
   .board .minor { display: none; }
 }
 
-/* ---------- intro: notice, statement, video, jump links ---------- */
+/* ---------- intro: statement, video, jump links ---------- */
 /* The intro continues the hero's white band (the bands alternate white / light blue; Jason, 2026-10-30). */
 .intro { display: grid; gap: clamp(36px, 5vw, 64px); padding-block: 0 clamp(64px, 8vw, 112px); }
-.notice { background: var(--tint); padding: 22px 26px; display: grid; gap: 6px; max-width: 46rem; }
 .statement { font-size: var(--s-statement); line-height: 1.3; font-weight: 500; max-width: 24em; text-wrap: pretty; }
 .video {
   position: relative;
@@ -384,8 +389,19 @@ p { margin: 0; }
 .pilot :focus-visible { outline-color: var(--white); }
 .pilot-in { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: end; }
 .pilot-cta { display: grid; gap: 10px; justify-items: start; min-width: 0; }
-.pilot-cta .addr { font-family: var(--mono); font-size: var(--s-small); color: var(--on-blue-text); user-select: all; overflow-wrap: anywhere; }
-.soon { font-family: var(--mono); font-size: var(--s-small); color: var(--white); border: 1.5px dashed rgba(255, 255, 255, 0.6); padding: 12px 16px; }
+/* The sign-up: a white email field and the white button side by side, wrapping on phones. */
+.signup { display: grid; gap: 10px; width: 100%; max-width: 30rem; }
+.signup label { font-weight: 500; }
+.signup-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.signup input[type="email"] { flex: 1 1 14rem; min-width: 0; padding: 12px 14px; border: 2px solid var(--white); border-radius: 0; background: var(--white); color: var(--ink); font: 400 var(--s-body)/1.2 var(--sans); }
+.signup input::placeholder { color: var(--ink-3); }
+.signup input:disabled, .signup .btn:disabled { opacity: 0.75; cursor: default; }
+.signup .btn { flex: none; justify-content: center; }
+.signup-note { font-size: var(--s-small); color: var(--on-blue-text); min-height: 1.6em; }
+.signup-note.bad { color: var(--white); font-weight: 500; }
+.signup-alt { font-size: var(--s-small); color: var(--on-blue-text); overflow-wrap: anywhere; }
+.signup-alt span { user-select: all; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 @media (max-width: 820px) { .pilot-in { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- about ---------- */
@@ -444,7 +460,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
         </div>
       </div>
       <div class="hero-side">
-        <p class="promo">Pilots start in spring 2027. <a class="more" href="#pilot">Join the pilot</a></p>
+        <p class="promo">Pilot testing has opened. <a class="more" href="#pilot">Join the pilot</a></p>
         <figure class="desk" id="desk" aria-label="Twelve of the 36 channel faders from Automix's mix of a full band recording. They start at minus 6 dB and move to the mix at 10 seconds.">
           <div class="desk-head">
             <span class="desk-title">FULL BAND · 36 CH</span>
@@ -467,12 +483,8 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
     </div>
   </section>
 
-  <!-- Intro: notice, statement, demo video (link in SITE.demoVideoUrl at the top of this file), jump links -->
+  <!-- Intro: statement, demo video (link in SITE.demoVideoUrl at the top of this file), jump links -->
   <div class="wrap intro" id="demo">
-    <div class="notice">
-      <p>New: watch Automix mix a live band from scratch, sound on.</p>
-      <p><a class="more" href="#video">Watch the demo</a></p>
-    </div>
     <p class="statement">Automix listens to every channel on stage and sets each one's volume, panning, EQ (tone) and compression (dynamics) within 10 seconds of the band starting to play. Then it keeps the mix balanced as they play.</p>
     <div>
       <div class="video" id="video">
@@ -657,6 +669,7 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
             <li>Both start modes, Soundcheck and Plug and play</li>
             <li>Auto, Trim and Lock on every setting, with a reason for every change</li>
             <li>Feedback protection on live inputs</li>
+            <li>Pilot testing at real shows with sound engineers and venues, open now</li>
           </ul>
         </div>
         <div class="next">
@@ -664,22 +677,30 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
           <ul>
             <li>Control of the major digital mixing consoles from a laptop or tablet</li>
             <li>Remembering each engineer's preferences for the next show</li>
-            <li>First live trials at our own gigs, then pilots with venues in spring 2027</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Pilot: the button uses SITE.pilotFormUrl or SITE.contactEmail at the top of this file -->
+  <!-- Pilot: the email field sends to SITE.signupUrl at the top of this file -->
   <section class="pilot" id="pilot">
     <div class="wrap pilot-in">
       <div class="chapter-head">
         <h2>Try it at your shows</h2>
-        <p>We're looking for sound engineers, small venues, churches and campus event teams in the Triangle to run Automix alongside their own mix at real shows, and tell us what it gets wrong.</p>
+        <p>We're looking for sound engineers, small venues, churches and campus event teams to run Automix alongside their own mix at real shows, and tell us what it gets wrong.</p>
       </div>
       <div class="pilot-cta" id="pilotCta">
-        <p class="soon">Pilot sign-up opens soon.</p>
+        <form class="signup" id="signup" novalidate>
+          <label for="signupEmail">Sign up for the pilot</label>
+          <div class="signup-row">
+            <input id="signupEmail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+            <button class="btn btn-white" type="submit" id="signupBtn">Sign up</button>
+          </div>
+          <div class="hp" aria-hidden="true"><label for="signupWebsite">Leave this empty</label><input id="signupWebsite" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+          <p class="signup-note" id="signupNote" aria-live="polite">We'll only email you about the pilot.</p>
+        </form>
+        <p class="signup-alt" id="pilotContact" hidden></p>
       </div>
     </div>
   </section>
@@ -796,30 +817,58 @@ footer { padding-block: clamp(48px, 6vw, 72px) 28px; }
     }
   })();
 
-  /* ---------- pilot sign-up ---------- */
-  (function setUpPilot() {
-    var box = $("pilotCta");
-    var form = (SITE.pilotFormUrl || "").trim();
+  /* ---------- pilot sign-up: the email field posts to SITE.signupUrl (Formspree or a Google Form) ---------- */
+  (function setUpSignup() {
+    var form = $("signup"), input = $("signupEmail"), btn = $("signupBtn"), note = $("signupNote");
+    var url = (SITE.signupUrl || "").trim();
+    var field = (SITE.signupField || "email").trim() || "email";
     var mail = (SITE.contactEmail || "").trim();
-    if (!form && !mail) return;
-    box.textContent = "";
-    var a = document.createElement("a");
-    a.className = "btn btn-white";
-    if (form) {
-      a.href = form;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.textContent = "Sign up for a pilot ↗";
-      box.appendChild(a);
-    } else {
-      a.href = "mailto:" + mail + "?subject=" + encodeURIComponent("Automix pilot");
-      a.textContent = "Email us about a pilot";
-      box.appendChild(a);
-      var p = document.createElement("p");
-      p.className = "addr";
-      p.textContent = mail;
-      box.appendChild(p);
+    if (mail) {
+      var c = $("pilotContact"), s = document.createElement("span");
+      c.textContent = "Questions? Email ";
+      s.textContent = mail;
+      c.appendChild(s);
+      c.hidden = false;
     }
+    var host = "";
+    try { host = new URL(url, location.href).hostname; } catch (e) {}
+    var google = /(^|\.)google\.com$/.test(host);
+    function say(text, bad) { note.textContent = text; note.classList.toggle("bad", !!bad); }
+    function done() {
+      input.value = "";
+      input.disabled = true;
+      btn.disabled = true;
+      btn.textContent = "Signed up";
+      say("Thanks, you're on the list. We'll be in touch soon.");
+    }
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var email = input.value.trim();
+      if (!email || !input.checkValidity()) {
+        say("Enter a full email address, like name@example.com.", true);
+        input.focus();
+        return;
+      }
+      if ($("signupWebsite").value) { done(); return; }   // filled in by a bot: pretend, send nothing
+      if (!url) { say("Sign-up opens soon. Please check back in a few days.", true); return; }
+      // A Google Form takes a plain form post (as its own page sends); Formspree takes FormData.
+      var data = google ? new URLSearchParams() : new FormData();
+      data.append(field, email);
+      if (google) { data.append("fvv", "1"); data.append("pageHistory", "0"); }
+      else data.append("_subject", "Automix pilot sign-up");
+      btn.disabled = true;
+      say("Signing you up…");
+      fetch(url, google ? { method: "POST", mode: "no-cors", body: data }
+                        : { method: "POST", body: data, headers: { Accept: "application/json" } })
+        .then(function (r) {
+          if (!google && !r.ok) throw new Error("HTTP " + r.status);   // a Google Form's reply can't be read
+          done();
+        })
+        .catch(function () {
+          btn.disabled = false;
+          say("That didn't go through. Check your connection and try again.", true);
+        });
+    });
   })();
 
   /* ---------- the desk: some of the faders of Automix's mix of a 36-track recording, from its params.json (see README.md) ---------- */
